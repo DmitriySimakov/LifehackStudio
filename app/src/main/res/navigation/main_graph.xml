@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/companiesListFragment">
+
+    <fragment
+        android:id="@+id/companiesListFragment"
+        android:name="com.dmitrysimakov.lifehackstudio.ui.companies_list.CompaniesListFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_companies_list" >
+        <action
+            android:id="@+id/to_companyInfoFragment"
+            app:destination="@id/companyInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyInfoFragment"
+        android:name="com.dmitrysimakov.lifehackstudio.ui.company_info.CompanyInfoFragment"
+        android:label="{name}"
+        tools:layout="@layout/fragment_company_info" >
+        <argument
+            android:name="companyId"
+            app:argType="long" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
+</navigation>

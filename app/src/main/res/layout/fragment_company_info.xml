@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.company_info.CompanyInfoFragment">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="250dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginHorizontal="@dimen/frame_padding"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/link_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginHorizontal="@dimen/frame_padding"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:text="Link" />
+
+        <TextView
+            android:id="@+id/link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/frame_padding"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            tools:text="https://lifehack.studio"/>
+
+        <TextView
+            android:id="@+id/phone_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginHorizontal="@dimen/frame_padding"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:text="Phone" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/frame_padding"
+            android:layout_marginBottom="@dimen/frame_padding"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            tools:text="+7 (777) 777-77-77"/>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.dmitrysimakov.lifehackstudio.ui.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+    </LinearLayout>
+
+</ScrollView>
