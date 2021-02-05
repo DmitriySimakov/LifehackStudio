@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.dmitrysimakov.lifehackstudio.BASE_URL
 import com.dmitrysimakov.lifehackstudio.R
+import com.dmitrysimakov.lifehackstudio.data.CompanyInfo
 import com.dmitrysimakov.lifehackstudio.databinding.FragmentCompanyInfoBinding
 import com.dmitrysimakov.lifehackstudio.ui.MapFragment
 import com.dmitrysimakov.lifehackstudio.visibleOrGone
@@ -28,6 +29,11 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentCompanyInfoBinding
 
     private lateinit var map: GoogleMap
+    private lateinit var mapFragment: MapFragment
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +41,7 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCompanyInfoBinding.inflate(inflater)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
+        mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.setOnTouchListener {
             binding.scroll.requestDisallowInterceptTouchEvent(true)
         }
@@ -60,13 +66,17 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
             binding.phone.visibleOrGone(info.phone.isNotBlank())
             binding.phone.text = info.phone
 
+            updateMap(info)
+        }
+    }
+
+    private fun updateMap(info: CompanyInfo) {
+        if (info.lat == 0.0 && info.lon == 0.0) {
+            mapFragment.view?.visibility = View.GONE
+        } else {
             val location = LatLng(info.lat, info.lon)
             map.addMarker(MarkerOptions().position(location).title(info.name))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
         }
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
     }
 }
