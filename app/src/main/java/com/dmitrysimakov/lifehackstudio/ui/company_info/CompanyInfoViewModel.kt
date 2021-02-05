@@ -1,5 +1,6 @@
 package com.dmitrysimakov.lifehackstudio.ui.company_info
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.dmitrysimakov.lifehackstudio.data.ApiRequests
 import com.dmitrysimakov.lifehackstudio.data.CompanyInfo
@@ -15,10 +16,25 @@ class CompanyInfoViewModel(
 
     fun setCompanyId(id: Long) {
         viewModelScope.launch {
-            val response = api.company(id).awaitResponse()
-            if (response.isSuccessful) {
-                _companyInfo.value = response.body()?.first()
+            try {
+                val response = api.company(id).awaitResponse()
+                if (response.isSuccessful) {
+                    _companyInfo.value = response.body()?.first()
+                } else {
+                    setErrorInfo()
+                }
+            } catch (e: Exception) {
+                setErrorInfo()
+                Log.e(TAG, "setCompanyId: ", e)
             }
         }
+    }
+
+    private fun setErrorInfo() {
+        _companyInfo.value = CompanyInfo(description = "Не удалось загрузить страницу")
+    }
+
+    companion object {
+        private val TAG = CompanyInfoViewModel::class.simpleName
     }
 }

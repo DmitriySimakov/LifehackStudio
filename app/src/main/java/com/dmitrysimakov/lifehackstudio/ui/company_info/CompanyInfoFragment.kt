@@ -42,6 +42,7 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
     ): View {
         binding = FragmentCompanyInfoBinding.inflate(inflater)
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
+        mapFragment.view?.visibility = View.GONE
         mapFragment.setOnTouchListener {
             binding.scroll.requestDisallowInterceptTouchEvent(true)
         }
@@ -71,9 +72,8 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun updateMap(info: CompanyInfo) {
-        if (info.lat == 0.0 && info.lon == 0.0) {
-            mapFragment.view?.visibility = View.GONE
-        } else {
+        if (info.lat != 0.0 || info.lon != 0.0) {
+            mapFragment.view?.visibility = View.VISIBLE
             val location = LatLng(info.lat, info.lon)
             map.addMarker(MarkerOptions().position(location).title(info.name))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
