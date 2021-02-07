@@ -32,7 +32,6 @@ class CompaniesListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.loadCompanies()
         viewModel.companies.observe(viewLifecycleOwner) { companies ->
             adapter.submitList(companies)
         }

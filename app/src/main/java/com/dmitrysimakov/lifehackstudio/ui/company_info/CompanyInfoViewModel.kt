@@ -5,33 +5,28 @@ import androidx.lifecycle.*
 import com.dmitrysimakov.lifehackstudio.data.ApiRequests
 import com.dmitrysimakov.lifehackstudio.data.CompanyInfo
 import kotlinx.coroutines.launch
-import retrofit2.awaitResponse
+import retrofit2.await
 
 class CompanyInfoViewModel(
     private val api: ApiRequests
 ) : ViewModel() {
 
-    private val _companyInfo = MutableLiveData<CompanyInfo>()
-    val companyInfo: LiveData<CompanyInfo> = _companyInfo
+    private val companyId = MutableLiveData<Long>()
 
-    fun setCompanyId(id: Long) {
-        viewModelScope.launch {
-            try {
-                val response = api.company(id).awaitResponse()
-                if (response.isSuccessful) {
-                    _companyInfo.value = response.body()?.first()
-                } else {
-                    setErrorInfo()
-                }
+    val companyInfo = companyId.switchMap { id ->
+        liveData {
+            val info = try {
+                api.company(id).await().first()
             } catch (e: Exception) {
-                setErrorInfo()
                 Log.e(TAG, "setCompanyId: ", e)
+                CompanyInfo(description = "Не удалось загрузить страницу")
             }
+            emit(info)
         }
     }
 
-    private fun setErrorInfo() {
-        _companyInfo.value = CompanyInfo(description = "Не удалось загрузить страницу")
+    fun setCompanyId(id: Long) {
+        companyId.value = id
     }
 
     companion object {
