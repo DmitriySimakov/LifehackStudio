@@ -10,7 +10,5 @@ class CompaniesListViewModel(
     private val api: ApiRequests
 ) : ViewModel() {
 
-    val companies = liveData {
-        emit(api.companies().await())
-    }
+    val companies = api.companies()
 }

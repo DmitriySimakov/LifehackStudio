@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.dmitrysimakov.lifehackstudio.ui.companies_list.CompaniesListFragmentDirections.Companion.toCompanyInfoFragment
 import com.dmitrysimakov.lifehackstudio.databinding.FragmentCompaniesListBinding
+import me.linshen.retrofit2.adapter.ApiSuccessResponse
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CompaniesListFragment : Fragment() {
@@ -32,8 +33,10 @@ class CompaniesListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.companies.observe(viewLifecycleOwner) { companies ->
-            adapter.submitList(companies)
+        viewModel.companies.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ApiSuccessResponse -> adapter.submitList(response.body)
+            }
         }
     }
 }

@@ -13,23 +13,9 @@ class CompanyInfoViewModel(
 
     private val companyId = MutableLiveData<Long>()
 
-    val companyInfo = companyId.switchMap { id ->
-        liveData {
-            val info = try {
-                api.company(id).await().first()
-            } catch (e: Exception) {
-                Log.e(TAG, "setCompanyId: ", e)
-                CompanyInfo(description = "Не удалось загрузить страницу")
-            }
-            emit(info)
-        }
-    }
+    val companyInfo = companyId.switchMap { id -> api.company(id) }
 
     fun setCompanyId(id: Long) {
         companyId.value = id
-    }
-
-    companion object {
-        private val TAG = CompanyInfoViewModel::class.simpleName
     }
 }

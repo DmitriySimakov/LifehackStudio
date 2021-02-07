@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import me.linshen.retrofit2.adapter.ApiSuccessResponse
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
@@ -53,22 +54,29 @@ class CompanyInfoFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.setCompanyId(args.companyId)
-        viewModel.companyInfo.observe(viewLifecycleOwner) { info ->
-            binding.img.visibleOrGone(info.img.isNotBlank())
-            Glide.with(this).load(BASE_URL + info.img).into(binding.img)
-
-            binding.description.text = info.description
-
-            binding.linkLabel.visibleOrGone(info.www.isNotBlank())
-            binding.link.visibleOrGone(info.www.isNotBlank())
-            binding.link.text = info.www
-
-            binding.phoneLabel.visibleOrGone(info.phone.isNotBlank())
-            binding.phone.visibleOrGone(info.phone.isNotBlank())
-            binding.phone.text = info.phone
-
-            updateMap(info)
+        viewModel.companyInfo.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ApiSuccessResponse -> updateCompanyInfo(response.body.first())
+                else -> updateCompanyInfo(CompanyInfo(description = getString(R.string.load_page_error)))
+            }
         }
+    }
+
+    private fun updateCompanyInfo(info: CompanyInfo) {
+        binding.img.visibleOrGone(info.img.isNotBlank())
+        Glide.with(this).load(BASE_URL + info.img).into(binding.img)
+
+        binding.description.text = info.description
+
+        binding.linkLabel.visibleOrGone(info.www.isNotBlank())
+        binding.link.visibleOrGone(info.www.isNotBlank())
+        binding.link.text = info.www
+
+        binding.phoneLabel.visibleOrGone(info.phone.isNotBlank())
+        binding.phone.visibleOrGone(info.phone.isNotBlank())
+        binding.phone.text = info.phone
+
+        updateMap(info)
     }
 
     private fun updateMap(info: CompanyInfo) {
